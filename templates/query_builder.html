@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Query Builder{% endblock %}
+
+{% block content %}
+<h2>Query Builder</h2>
+<form method="post" action="{% url 'query_builder' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="query">Enter your query</label>
+        <textarea class="form-control" id="query" name="query" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Run Query</button>
+</form>
+{% if result %}
+<div class="mt-4">
+    <h4>Results:</h4>
+    <p>Result count: {{ result.count }}</p>
+    <ul>
+        {% for item in result.data %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

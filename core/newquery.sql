@@ -1,0 +1,2 @@
+ALTER TABLE core_company
+ADD COLUMN domain VARCHAR(255);
