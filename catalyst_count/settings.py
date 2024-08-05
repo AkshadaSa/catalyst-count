@@ -2,21 +2,26 @@ import os
 from pathlib import Path
 import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
-print("DB_NAME:", env('DB_NAME', default='default_value'))
-print("DB_USER:", env('DB_USER', default='default_value'))
-print("DB_PASSWORD:", env('DB_PASSWORD', default='default_value'))
-print("DB_HOST:", env('DB_HOST', default='default_value'))
-print("DB_PORT:", env('DB_PORT', default='default_value'))
+print(f"DB_NAME: {env('DB_NAME', default='default_value')}")
+print(f"DB_USER: {env('DB_USER', default='default_value')}")
+print(f"DB_PASSWORD: {env('DB_PASSWORD', default='default_value')}")
+print(f"DB_HOST: {env('DB_HOST', default='default_value')}")
+print(f"DB_PORT: {env('DB_PORT', default='default_value')}")
 
 # Security settings
 SECRET_KEY = env('SECRET_KEY', default='your-secret-key')
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 
 
@@ -34,6 +39,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -68,14 +74,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'catalyst_count.wsgi.application'
 
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'catalyst_db',
-        'USER': 'catalyst_user',
-        'PASSWORD': 'Avinash@92',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -88,17 +96,21 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # URL prefix for static files
 STATIC_URL = '/static/'
 
 # Directory where static files will be collected for production
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Additional directories to look for static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "core/static")]
+
 
 # Media files
 MEDIA_URL = '/media/'
