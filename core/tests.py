@@ -1,10 +1,15 @@
 import environ
+from django.test import TestCase
 
+# Initialize environment variables
 env = environ.Env()
 environ.Env.read_env()
 
-print("DB_NAME:", env('DB_NAME', default='default_value'))
-print("DB_USER:", env('DB_USER', default='default_value'))
-print("DB_PASSWORD:", env('DB_PASSWORD', default='default_value'))
-print("DB_HOST:", env('DB_HOST', default='default_value'))
-print("DB_PORT:", env('DB_PORT', default='default_value'))
+class SimpleTest(TestCase):
+    def test_addition(self):
+        self.assertEqual(1 + 1, 2)
+
+    def test_db_env_variables(self):
+        # Example test for checking environment variables
+        self.assertEqual(env('DB_NAME', default='default_value'), 'catalyst_db')
+        self.assertEqual(env('DB_USER', default='default_value'), 'catalyst_user')
